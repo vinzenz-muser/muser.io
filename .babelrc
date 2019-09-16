@@ -1,0 +1,17 @@
+{
+    "presets": [
+        ["@babel/env", {
+            "targets": {
+                "browsers": [
+                    "> 0.25%",
+                    "Explorer 11",
+                    "last 4 Edge versions"
+                ]
+            },
+            "useBuiltIns": true
+        }]
+    ],
+    "ignore": [
+        "node_modules"
+    ]
+}

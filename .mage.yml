@@ -1,0 +1,150 @@
+magephp:
+    log_dir: var/log/deployment
+    symfony:
+        console: php72 bin/console
+
+    exclude:
+        # Git and IDE files
+        - .idea
+        - .DS_Store
+        - .git
+        - .gitignore
+        - ._*
+
+        # Development files
+        - README.md
+        - .jshintignore
+        - .mage.yml
+        - .web-server-pid
+        - gulpfile.js
+        - package-lock.json
+        - package.json
+        - yarn.lock
+        - webpack.config.js
+        - phpstan.neon
+        - .php_cs.dist
+
+        # Tests
+        - ./tests
+        - phpunit.xml.dist
+
+        # Contao Files
+        - ./files
+
+        # Vendors
+        - ./node_modules
+        - ./assets
+        - ./vendor
+
+        # Cache files
+        - ./var/cache
+        - ./var/logs
+        - ./var/sync
+        # - ./var/dump.sql
+
+        # Generated and symlinked
+        - ./public/assets
+        - ./public/bundles
+        - ./public/share
+        - ./public/system
+
+        # Contao system
+        - ./system/cache
+        - ./system/tmp
+        - ./system/themes
+        - ./system/logs
+        - ./system/modules
+        - ./system/themes
+        - ./system/logs
+
+    environments:
+        staging:
+            user: vinzenzm
+            from: ./
+            host_path: /home/vinzenzm/roibier/staging/
+            releases: 3
+            php_bin: php72
+            hosts:
+                - muser.io
+            pre-deploy:
+                 - custom/frontend-workflow
+            on-deploy:
+                - custom/create-shared-directories
+                - custom/copy-env: { env: 'staging' }
+                - custom/install-composer
+                - symfony/assets-install: { env: 'prod', target: 'public' }
+                - symfony/cache-clear: { env: 'prod' }
+                - symfony/cache-warmup: { env: 'prod' }
+                - custom/contao-install
+
+                # Removed shared directories
+                - fs/remove: { file: 'files', 'flags': '-rf' }
+                - fs/remove: { file: 'assets/images', 'flags': '-rf' }
+                - fs/remove: { file: 'var/log', 'flags': '-rf' }
+
+                # Symlink removed directories with shared ones
+                - fs/link: { from: '../../shared/files', to: 'files' }
+                - fs/link: { from: '../../../shared/assets/images', to: 'assets/images' }
+                - fs/link: { from: '../../../shared/var/log', to: 'var/log' }
+
+                - custom/contao-symlinks
+                - custom/contao-filesync
+                - custom/doctrine-schema-update
+
+            on-release:
+            post-release:
+                # Clean cache
+                - custom/restart-php
+            post-deploy:
+        production:
+            user: vinzenzm
+            from: ./
+            host_path: /home/vinzenzm/roibier/production/
+            releases: 3
+            php_bin: php72
+            hosts:
+                - muser.io
+            pre-deploy:
+                 - custom/frontend-workflow
+            on-deploy:
+                - custom/create-shared-directories
+                - custom/copy-env: { env: 'production' }
+                - custom/install-composer
+                - symfony/assets-install: { env: 'prod', target: 'public' }
+                - symfony/cache-clear: { env: 'prod' }
+                - symfony/cache-warmup: { env: 'prod' }
+                - custom/contao-install
+
+                # Removed shared directories
+                - fs/remove: { file: 'files', 'flags': '-rf' }
+                - fs/remove: { file: 'assets/images', 'flags': '-rf' }
+                - fs/remove: { file: 'var/log', 'flags': '-rf' }
+
+                # Symlink removed directories with shared ones
+                - fs/link: { from: '../../shared/files', to: 'files' }
+                - fs/link: { from: '../../../shared/assets/images', to: 'assets/images' }
+                - fs/link: { from: '../../../shared/var/log', to: 'var/log' }
+
+                - custom/contao-symlinks
+                - custom/contao-filesync
+                - custom/doctrine-schema-update
+
+            on-release:
+            post-release:
+                # Clean cache
+                - custom/restart-php
+            post-deploy:
+
+    custom_tasks_directory: bin/deployment
+    custom_tasks:
+        - 'Deployment\ContaoInstallTask'
+        - 'Deployment\ContaoSymlinksTask'
+        - 'Deployment\ContaoFilesyncTask'
+        - 'Deployment\RunFrontendWorkflow'
+        - 'Deployment\RunTestSuiteTask'
+        - 'Deployment\RunPhpStanTask'
+        - 'Deployment\InstallComposerTask'
+        - 'Deployment\CopyEnvTask'
+        - 'Deployment\CreateSharedDirectoriesTask'
+        - 'Deployment\DoctrineSchemaUpdateTask'
+        - 'Deployment\RestartPhpTask'

@@ -1,0 +1,13 @@
+@import "~foundation-sites/scss/util/unit";
+@import "~foundation-sites/scss/util/breakpoint";
+
+// Colors
+$color-black: #000;
+$color-white: #fff;
+
+// Fonts
+$font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+// Foundation
+$body-font-family: $font-primary;
+$global-font-size: 18px;

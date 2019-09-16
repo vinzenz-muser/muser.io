@@ -1,0 +1,6 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+ContaoCoreBundle:
+    resource: "@ContaoCoreBundle/Resources/config/routing.yml"

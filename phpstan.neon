@@ -1,0 +1,25 @@
+includes:
+        - vendor/contao/phpstan/extension.neon
+        - vendor/phpstan/phpstan-doctrine/extension.neon
+        - vendor/phpstan/phpstan-symfony/extension.neon
+
+parameters:
+    bootstrap: %rootDir%/../../../vendor/autoload.php
+
+    contao:
+        services_yml_path: %rootDir%/../../../vendor/contao/core-bundle/src/Resources/config/services.yml
+
+    symfony:
+        container_xml_path: %rootDir%/../../../var/cache/dev/HttpKernelApp_HttpKernel_AppKernelDevDebugContainer.xml
+
+    reportUnmatchedIgnoredErrors: false
+    universalObjectCratesClasses:
+        - Contao\Template
+        - Contao\ContentModel
+        - Contao\Model
+
+    ignoreErrors:
+        # ignore active record object from contao
+        -
+            message: '#Access to an undefined property object::#'
+            path: %currentWorkingDirectory%/src/Alias/AliasGenerator.php

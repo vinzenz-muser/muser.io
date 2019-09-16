@@ -1,0 +1,72 @@
+.full-screen-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #C1E2FF;
+}
+
+.beer-container {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+
+    .beer-image {
+        background-image: url('../images/beer.png');
+        background-size: contain;
+        width: 200px;
+        height: 200px;
+    }
+
+    .beer-text {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../images/special_bg.png');
+    background-repeat: no-repeat;
+    background-size: 100% 150%;
+}
+
+#stage {
+    height: 3000vh;
+}
+
+.actor {
+    position: fixed;
+    transition: all;
+}
+
+#speaker {
+    width: 30vw;
+    height: 100vh;
+    top: 0;
+    background-color: rgba(0,0,0,0.2);
+}
+
+#crowd {
+    height: 40vh;
+    width: 50vw;
+    right: 0;
+    background-color: rgba(200,0,0,0.2);
+}
+
+.speaker-bubble {
+    width: 30vw;
+    left: 30vw;
+    top: 10vh;
+    padding: 30px;
+    border-radius: 30px;
+    background-color: white;
+}
+

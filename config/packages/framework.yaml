@@ -1,0 +1,22 @@
+framework:
+    assets:
+        json_manifest_path: '%kernel.project_dir%/public/dist/manifest.json'
+
+    esi: { enabled: true }
+    secret: '%env(APP_SECRET)%'
+
+    csrf_protection: ~
+    lock: ~
+
+    templating:
+        engines: ['twig']
+
+    session:
+        handler_id: ~
+
+    fragments: { path: /_fragment }
+
+    php_errors:
+        log: true
+
+    cache:

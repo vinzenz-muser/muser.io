@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+@import "~foundation-sites/scss/foundation";
+@import "util/vars";
+
+@include foundation-xy-grid-classes;
+
+.colsetexample {
+    width: 140px !important;
+    background-color: #ffffff;
+    border: 1px dashed #999999;
+    float: left;
+    margin-right: 1em !important;
+    margin-bottom: 1em;
+
+    & > div {
+        background-color: #fff;
+        text-align: center;
+        line-height: 2em;
+
+        &.active {
+            background-color: #8ab858;
+            color: #445f28;
+        }
+    }
+
+    &.final > div {
+        background-color: #ff2222;
+        color: #ffd1d1;
+    }
+}
+
+.sc_hint {
+    line-height: 2em;
+}
+
+.wrapper_start, .wrapper_separator, .wrapper_stop {
+    & > div:not(.tl_content_right):not(.cte_type) {
+        transition: opacity ease-in-out 0.2s;
+        opacity: 0.5;
+    }
+
+    &:hover {
+        & > div:not(.tl_content_right):not(.cte_type) {
+            opacity: 1;
+        }
+    }
+}

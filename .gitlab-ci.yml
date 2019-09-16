@@ -1,0 +1,40 @@
+image: registry.gitlab.com/1upgmbh/docker-image:latest
+
+cache:
+    paths:
+        - vendor/
+        - bin/.phpunit/
+
+before_script:
+    # Install composer
+    - curl -sS https://getcomposer.org/installer | php
+
+    # Install all project dependencies
+    - cp config/hosts/.env.gitlab.dist .env.local
+    - php -v
+    - php composer.phar clear-cache
+    - php composer.phar install
+    - php bin/console cache:warmup --env=dev
+
+    # Database options, in case you need functional tests
+    # - php bin/console doctrine:schema:create
+
+# Enable additional services
+# services:
+#    - mysql:5.7
+
+variables:
+    # Configure mysql service (https://hub.docker.com/_/mysql/)
+    # MYSQL_DATABASE: symfony
+    # MYSQL_ROOT_PASSWORD: password
+
+    # https://docs.gitlab.com/ce/ci/docker/using_docker_build.html#using-the-overlayfs-driver
+    DOCKER_DRIVER: overlay2
+
+tests:
+    script:
+        - bin/phpunit
+        - vendor/bin/phpstan analyze src/ --level=7
+        - vendor/bin/php-cs-fixer fix --dry-run --diff
+    only:
+        - master

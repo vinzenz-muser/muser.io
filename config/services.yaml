@@ -1,0 +1,35 @@
+parameters:
+    locale: 'de'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+#            $projectDir: '%kernel.project_dir%'
+
+    # Alias
+    Contao\CoreBundle\Routing\ScopeMatcher: "@contao.routing.scope_matcher"
+    Contao\CoreBundle\Image\ImageFactory: "@contao.image.image_factory"
+    Contao\CoreBundle\Image\PictureFactory: "@contao.image.picture_factory"
+    Contao\CoreBundle\Translation\Translator: "@contao.translation.translator"
+
+    # Autowiring Configuration
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Mapping,Migrations,Tests,Resources,Kernel.php}'
+
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    App\ContentElement\:
+        resource: '../src/ContentElement/*'
+        tags:
+            - { name: contao.content_element, category: application }
+
+    App\FrontendModule\:
+        resource: '../src/FrontendModule/*'
+        tags:
+            - { name: contao.frontend_module, category: application }

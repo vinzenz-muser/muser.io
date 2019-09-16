@@ -1,0 +1,35 @@
+{
+    "author": "1up GmbH",
+    "private": true,
+    "dependencies": {
+        "@babel/polyfill": "^7.4.3",
+        "foundation-sites": "^6.5",
+        "jquery": "~3.2.0",
+        "normalize.css": "~7.0",
+        "progressbar.js": "^1.0.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.1.2",
+        "@babel/preset-env": "^7.1.0",
+        "autoprefixer": "^9.2.0",
+        "babel-loader": "^8.0.4",
+        "clean-css-loader": "^1.1.0",
+        "clean-webpack-plugin": "^0.1.19",
+        "css-loader": "^1.0.0",
+        "file-loader": "^2.0.0",
+        "mini-css-extract-plugin": "^0.4.4",
+        "node-sass": "^4.9.4",
+        "postcss-loader": "^3.0.0",
+        "sass-loader": "^7.1.0",
+        "style-loader": "^0.23.1",
+        "webpack": "^4.20.2",
+        "webpack-cli": "^3.1.2",
+        "webpack-livereload-plugin": "^2.1.1",
+        "webpack-manifest-plugin": "^2.0.4"
+    },
+    "scripts": {
+        "build": "yarn build:dev",
+        "build:dev": "export NODE_ENV='development' && node_modules/webpack/bin/webpack.js --mode development",
+        "build:prod": "export NODE_ENV='production' && node_modules/webpack/bin/webpack.js --mode production"
+    }
+}

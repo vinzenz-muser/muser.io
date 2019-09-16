@@ -1,0 +1,32 @@
+contao:
+    web_dir: "%kernel.project_dir%/public"
+    prepend_locale: false
+    encryption_key: "%kernel.secret%"
+    url_suffix: ''
+    upload_path: files
+    csrf_token_name: contao_csrf_token
+    pretty_error_screens: true
+    error_level: 8183 # E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED
+    image:
+        bypass_cache: false
+        target_dir: "%kernel.project_dir%/assets/images"
+        valid_extensions: ['jpg', 'jpeg', 'gif', 'png', 'tif', 'tiff', 'bmp', 'svg', 'svgz']
+        imagine_service: ~
+        imagine_options:
+            jpeg_quality: 80
+            interlace: plane
+        reject_large_uploads: false
+    security:
+        two_factor:
+            enforce_backend:  false
+
+    localconfig:
+        licenseAccepted: true
+        adminEmail: 'hello@1up.io'
+        installPassword: '$2y$10$G.Q7tUj3HsVWs1o/AsPge.FYAzuBWPAzEdxFwM6485f.5VcGYdhnC'
+        folderUrl: true
+        enableSearch: false
+        doNotRedirectEmpty: false
+        dateFormat: 'd.m.Y'
+        datimFormat: 'd.m.Y - H:i'
+        timeZone: 'Europe/Zurich'

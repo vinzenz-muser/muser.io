@@ -1,0 +1,46 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
+
+/assets/
+!/assets/website
+/files/
+/system/*
+!/system/config/
+/system/config/localconfig.php
+/system/config/tcpdf.php
+/system/modules/*/.skip
+
+# Auto generated
+/public/assets
+/public/share
+/public/system
+/public/files
+/public/dist
+/public/dev-dist
+
+/node_modules
+
+src/Resources/public
+
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+###< friendsofphp/php-cs-fixer ###
+
+.idea/workspace.xml
+.phpunit.result.cache

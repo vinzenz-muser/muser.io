@@ -1,0 +1,12 @@
+# FOS HttpCache configuration
+fos_http_cache:
+    proxy_client:
+        symfony:
+            use_kernel_dispatcher: true
+    cache_manager:
+        enabled: true
+    tags:
+        enabled: true
+        annotations:
+            enabled: false
+        max_header_value_length: 4096
