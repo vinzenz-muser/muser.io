@@ -3,88 +3,173 @@ require('@babel/polyfill');
 
 $ = require('jquery');
 
-$(() => {
+$(function () {
     $(document).ready(() => {
-        let scrollDown = true;
-        let lastScroll = 0;
-        let actors = $('.actor');
+        // scroll to top on page load
 
-        actors.each((index, actor) => {
-            let currentActor = $(actor);
-            currentActor.data('relevant-start',100);
-            currentActor.data('relevant-stop',0);
-            currentActor.children('.promise').each((index, promise) => {
-                let currentPromise = $(promise);
-                let currentStart = 100;
-                currentPromise.children('.data').each((index, data) => {
-                    let currentData = $(data);
+        var timeline = $('.timeline');
+        var duration = timeline.data('duration');
+        var permanentActors = $('.set > .actor');
+        var scenes = $('.scene');
 
-                    if (currentData.data('start') < currentActor.data('relevant-start')) {
-                        currentActor.data('relevant-start',currentData.data('start'));
-                    }
+        // Initialize the play
 
-                    if (currentData.data('stop') > currentActor.data('relevant-stop')) {
-                        currentActor.data('relevant-stop',currentData.data('stop'));
-                    }
+        $('.actor').each((indexActor, actor) => {
+            var minMax = {};
+            $(actor).children('.promise').each((index, promise) => {
+                var property = $(promise).data('property');
+                var value = $(promise).data('start-value');
+                var unit = $(promise).data('unit');
+                var currentVal = value;
+                var min = $(promise).data('start');
+                var max = $(promise).data('end')
 
-                    if (currentStart > currentData.data('start')) {
-                        currentActor.css(currentPromise.data('property'),currentData.data('start-value')+currentPromise.data('unit'));
-                        currentStart = currentData.data('start');
-                    }
-                });
+                if (!minMax[property]) {
+                    minMax[property] = {
+                        'min': min,
+                        'max': max
+                    };
+                }
+
+                if (min <= minMax[property]['min']) {
+                    minMax[property]['min'] = min;
+                    $(actor).children('.promise[data-property="'+property+'"]').removeClass('start-value');
+                    $(promise).addClass('start-value');
+                }
+
+                if (max >= minMax[property]['max']) {
+                    minMax[property]['max'] = max;
+                    $(actor).children('.promise[data-property="'+property+'"]').removeClass('end-value');
+                    $(promise).addClass('end-value')
+                }
+
+                if (unit) {
+                    currentVal = currentVal+unit;
+                }
+
+                $(actor).css(property,currentVal);
             });
         });
+
+        timeline.css('height', duration + 'px');
+
+        scenes.each((index, scene) => {
+            var min = duration;
+            var max = 0;
+            $(scene).children('.actor').each((actorIndex, actor) => {
+                $(actor).children('.promise').each((promiseIndex, promise) => {
+                    min = Math.min(min, $(promise).data('start'));
+                    max = Math.max(min, $(promise).data('end'));
+                })
+            });
+
+            $(scene).data('start', min);
+            $(scene).data('end', max);
+        });
+
+        scenes.last().data('end',duration + 10);
 
         $(window).scrollTop(0);
 
-        $(window).scroll(() => {
-            let scroll = $(window).scrollTop() / $('#stage').outerHeight() * 100;
-            scrollDown = lastScroll < scroll;
-            actors.removeClass('active');
-            actors.filter((index, actor) => {
-                let currentActor = $(actor);
-                return (currentActor.data('relevant-start') < scroll && currentActor.data('relevant-stop') > scroll)
+        resetScene(scenes.first());
 
-            }).addClass('active');
+        // Start the scrolling
+        $(window).on('scroll', () => {
+            var currentTime = $(window).scrollTop() / duration * 100;
 
-            actors.filter(':not(.active)').each((index, actor) => {
-                let currentActor = $(actor);
-                currentActor.children('.promise').each((index, promise) => {
-                    let currentPromise = $(promise);
-                    let firstData = currentPromise.children().first();
-                    let lastData = currentPromise.children().last();
+            // Activate the relevant scenes for better performance
+            activateScenes(scenes, currentTime, 1);
 
-                    if (firstData.data('start') > scroll) {
-                        currentActor.css(currentPromise.data('property'),firstData.data('start-value')+currentPromise.data('unit'));
-                        return;
-                    }
-
-                    if (firstData.data('stop') < scroll) {
-                        currentActor.css(currentPromise.data('property'),lastData.data('stop-value')+currentPromise.data('unit'));
-                    }
+            // If scrolled at top, reset first scene, else handle each actor of the active scene(s)
+            if (currentTime === 0) {
+                resetScene(scenes.first());
+                resetScene($('.set'));
+            } else {
+                $('.scene.active > .actor').each((index, actor) => {
+                    handleActor(actor,currentTime);
                 });
+            }
+
+            // The set is always active, so handle these actors all the time.
+            permanentActors.each((index, actor) => {
+                handleActor(actor,currentTime);
             });
+        })
+    })
+});
 
-            actors.filter('.active').each((index, actor) => {
-                let currentActor = $(actor);
-                currentActor.children('.promise').each((index, promise) => {
-                    let currentPromise = $(promise);
+function activateScenes(scenes, currentTime, threshold = 5) {
+    scenes.each((index, scene) => {
+        if ($(scene).data('start') - threshold < currentTime && $(scene).data('end') + threshold > currentTime) {
+            $(scene).addClass('active');
+        } else {
+            if ($(scene).hasClass('active')) {
+                if ($(scene).data('start') > currentTime) {
+                    resetScene(scene);
+                }
+                else {
+                    resetScene(scene,'end-value')
+                }
 
-                    currentPromise.children().each((index, data) => {
-                        let currentData = $(data);
-                        let start = currentData.data('start');
-                        let stop = currentData.data('stop');
+                $(scene).removeClass('active');
+            }
+        }
+    });
+}
 
-                        if (start < scroll && stop > scroll) {
-                            let valPercentage = (scroll - start) / (stop - start);
-                            let startVal = currentData.data('start-value');
-                            let stopVal = currentData.data('stop-value');
-                            let currentVal = (1 - valPercentage) * startVal + valPercentage * stopVal;
-                            currentActor.css(currentPromise.data('property'),currentVal+currentPromise.data('unit'));
-                        }
-                    })
-                });
-            });
+function resetScene(scene, state = 'start-value') {
+    $(scene).children('.actor').each((indexActor, actor) => {
+        $(actor).children('.promise.'+state).each((index, promise) => {
+            var css = $(promise).data('property');
+            var value = $(promise).data(state);
+            var unit = $(promise).data('unit');
+            var currentVal = value;
+
+            if (unit) {
+                currentVal = currentVal+unit;
+            }
+
+            $(actor).css(css,currentVal);
         });
     });
-});
+}
+
+function handleActor(actor, currentTime) {
+    $(actor).children('.promise').each((index, promise) => {
+        var start = $(promise).data('start');
+        var end = $(promise).data('end');
+        var startValue = $(promise).data('start-value');
+        var endValue = $(promise).data('end-value');
+        var unit = $(promise).data('unit');
+        var currentPercentage = (start - currentTime) / (start - end);
+        var property = $(promise).data('property');
+        var currentValue = (1 - currentPercentage) * startValue + currentPercentage * endValue;
+
+        if (start < currentTime && end > currentTime) {
+            if (unit) {
+                currentValue = currentValue + unit;
+            }
+            $(promise).addClass('active');
+            $(actor).css(property,currentValue);
+            return;
+        }
+
+        if (end < currentTime && $(promise).hasClass('active')) {
+            if (unit) {
+                endValue = endValue + unit;
+            }
+            $(promise).removeClass('active');
+            $(actor).css(property,endValue);
+            return
+        }
+
+        if (start > currentTime && $(promise).hasClass('active')) {
+            if (unit) {
+                startValue = startValue + unit;
+            }
+            $(promise).removeClass('active');
+            $(actor).css(property,startValue);
+        }
+
+    })
+}

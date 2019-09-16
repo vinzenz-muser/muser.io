@@ -23,33 +23,57 @@
 <body>
 
 <div class="page-container">
-    <div class="background"></div>
-    <div id="stage">
-        <div id="speaker" class="actor">
-            <div class="promise" data-property="left" data-unit="vw">
-                <div class="data" data-start = "1" data-stop="5" data-start-value="-30" data-stop-value="0"></div>
+    <div class="timeline" data-duration="30000">
+        <div class="stage">
+            <div class="set">
+                <div class="actor background background--1">
+                    <div class="promise" data-property="opacity" data-start="0" data-end="20" data-start-value="0" data-end-value="1" data-unit=""></div>
+                </div>
+                <div class="actor background background--2">
+                    <div class="promise" data-property="opacity" data-start="20" data-end="40" data-start-value="0" data-end-value="1" data-unit=""></div>
+                </div>
+                <div class="actor background background--3">
+                    <div class="promise" data-property="opacity" data-start="40" data-end="60" data-start-value="0" data-end-value="1" data-unit=""></div>
+                </div>
+                <div class="actor background background--4">
+                    <div class="promise" data-property="opacity" data-start="60" data-end="80" data-start-value="0" data-end-value="1" data-unit=""></div>
+                </div>
+                <div class="actor background background--5">
+                    <div class="promise" data-property="opacity" data-start="80" data-end="100" data-start-value="0" data-end-value="1" data-unit=""></div>
+                </div>
             </div>
-        </div>
-        <div id="crowd" class="actor">
-            <div class="promise" data-property="top" data-unit="vh">
-                <div class="data" data-start = "2" data-stop="5" data-start-value="100" data-stop-value="60"></div>
+            <div class="scene">
+                <div class="actor text">
+                    <div class="promise" data-property="opacity" data-start="0" data-end="20" data-start-value="0" data-end-value="1" data-unit=""></div>
+                    <div class="promise" data-property="opacity" data-start="22" data-end="25" data-start-value="1" data-end-value="0" data-unit=""></div>
+                    hello
+                </div>
+                <div class="actor text">
+                    <div class="promise" data-property="opacity" data-start="25" data-end="30" data-start-value="0" data-end-value="1" data-unit=""></div>
+                    <div class="promise" data-property="opacity" data-start="32" data-end="35" data-start-value="1" data-end-value="0" data-unit=""></div>
+                    and
+                </div>
+                <div class="actor text">
+                    <div class="promise" data-property="opacity" data-start="35" data-end="40" data-start-value="0" data-end-value="1" data-unit=""></div>
+                    <div class="promise" data-property="opacity" data-start="42" data-end="45" data-start-value="1" data-end-value="0" data-unit=""></div>
+                    welcome
+                </div>
+                <div class="actor text">
+                    <div class="promise" data-property="opacity" data-start="45" data-end="50" data-start-value="0" data-end-value="1" data-unit=""></div>
+                    <div class="promise" data-property="opacity" data-start="52" data-end="55" data-start-value="1" data-end-value="0" data-unit=""></div>
+                    to
+                </div>
+                <div class="actor text text--black name">
+                    <div class="promise" data-property="opacity" data-start="55" data-end="60" data-start-value="0" data-end-value="1" data-unit=""></div>
+                    <div class="promise" data-property="opacity" data-start="62" data-end="70" data-start-value="1" data-end-value="0" data-unit=""></div>
+                    muser.io
+                </div>
+                <div class="actor text mail name">
+                    <div class="promise" data-property="opacity" data-start="62" data-end="70" data-start-value="0" data-end-value="1" data-unit=""></div>
+                    <div class="promise" data-property="width" data-start="70" data-end="80" data-start-value="69" data-end-value="170" data-unit=""></div>
+                    <a href="mailto:stuff@muser.io">stuff@muser.io</a>
+                </div>
             </div>
-        </div>
-        <div class="actor speaker-bubble">
-            <div class="promise" data-property="opacity" data-unit="">
-                <div class="data" data-start="6" data-stop="10"  data-start-value="0" data-stop-value="1"></div>
-                <div class="data" data-start="11" data-stop="15" data-start-value="1" data-stop-value="0"></div>
-            </div>
-            <h1>Herzlich wilkommen zu der Präsentation!</h1>
-        </div>
-        <div class="actor speaker-bubble">
-            <div class="promise" data-property="opacity" data-unit="">
-                <div class="data" data-start="16" data-stop="20"  data-start-value="0" data-stop-value="1"></div>
-            </div>
-            <div class="promise" data-property="left" data-unit="vw">
-                <div class="data" data-start="27" data-stop="35"  data-start-value="30" data-stop-value="100"></div>
-            </div>
-            <p>Schön sind sie da</p>
         </div>
     </div>
 </div>
